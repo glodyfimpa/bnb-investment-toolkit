@@ -1,0 +1,9 @@
+{
+  "name": "bnb-investment-toolkit",
+  "version": "0.1.0",
+  "description": "Analyze short-term rental investment opportunities in Italy: market data analysis, automated property scouting from portals, ROI projections, and business plan generation",
+  "author": {
+    "name": "Glody Fimpa"
+  },
+  "keywords": ["airbnb", "short-term-rental", "investment", "real-estate", "italy", "roi"]
+}
