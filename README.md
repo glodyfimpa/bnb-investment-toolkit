@@ -1,30 +1,119 @@
-# BnB Investment Toolkit
+```
+ ____        ____    ___                     _                        _
+| __ ) _ __ | __ )  |_ _|_ ____   _____  ___| |_ _ __ ___   ___ _ __ | |_
+|  _ \| '_ \|  _ \   | || '_ \ \ / / _ \/ __| __| '_ ` _ \ / _ \ '_ \| __|
+| |_) | | | | |_) |  | || | | \ V /  __/\__ \ |_| | | | | |  __/ | | | |_
+|____/|_| |_|____/  |___|_| |_|\_/ \___||___/\__|_| |_| |_|\___|_| |_|\__|
+ _____           _ _    _ _
+|_   _|__   ___ | | | _(_) |_
+  | |/ _ \ / _ \| | |/ / | __|
+  | | (_) | (_) | |   <| | |_
+  |_|\___/ \___/|_|_|\_\_|\__|
+```
 
-Analyze and scout short-term rental investment opportunities in Italy. Combines market data analysis, automated property scouting from rental portals, ROI projections, and business plan generation.
+A Claude Code plugin for analyzing short-term rental investments in Italy.
 
-## Components
+Scout apartments from rental portals, evaluate zones with real market data, calculate ROI projections, generate business plans with go/no-go recommendations. Built around Italian tax rules (cedolare secca) and InsideAirbnb data.
 
-### Skills
+## Install
 
-**short-term-rental-analyzer** - Evaluate zones using InsideAirbnb market data. Calculate financial projections with Italian tax rules (cedolare secca). Generate Excel business plans with scenario analysis. Go/no-go recommendations based on break-even, ROI, and revenue-to-rent thresholds.
+```
+/plugin marketplace add glodyfimpa/bnb-investment-toolkit
+/plugin install bnb-investment-toolkit@bnb-investment-toolkit
+```
 
-**property-acquisition-tracker** - Automated scouting from Immobiliare.it, Idealista, and Casa.it. Filters by contract type, elevator, subletting restrictions, zone, price, and size. Deduplicates across portals. Scores listings and saves qualified properties to your project tracker.
+Or interactively:
 
-### Commands
+```
+/plugin marketplace add glodyfimpa/bnb-investment-toolkit
+/plugin
+```
 
-- `/scan-apartments [city] [max-price]` - Scan rental portals for investment-grade apartments
-- `/analyze-zone [zone-name] [city]` - Analyze a neighborhood for short-term rental potential
-- `/business-plan [rent] [zone]` - Generate a full business plan with ROI projections
+Go to the **Discover** tab, select `bnb-investment-toolkit`, choose a scope (user, project, or local).
 
-## Setup
+## Update
 
-1. Install the plugin
-2. Connect a project tracker (Notion, Airtable, or similar) for saving scouted properties
-3. Ensure browser access for portal scanning
+```
+/plugin marketplace update bnb-investment-toolkit
+```
 
-### Project Tracker Database Schema
+To receive updates automatically:
 
-If using Notion or similar, create a database with these fields:
+1. Run `/plugin`
+2. Go to the **Marketplaces** tab
+3. Select `bnb-investment-toolkit`
+4. Select **Enable auto-update**
+
+### Team setup
+
+Pre-enable the plugin in `.claude/settings.json`:
+
+```json
+{
+  "enabledPlugins": {
+    "bnb-investment-toolkit@bnb-investment-toolkit": true
+  },
+  "extraKnownMarketplaces": {
+    "bnb-investment-toolkit": {
+      "source": {
+        "source": "github",
+        "repo": "glodyfimpa/bnb-investment-toolkit"
+      }
+    }
+  }
+}
+```
+
+## Prerequisites
+
+Before using the plugin, connect:
+
+1. A **project tracker** (Notion, Airtable, or Google Sheets) with write access for saving scouted properties
+2. **Browser access** for navigating rental portals (Immobiliare.it, Idealista, Casa.it)
+
+The property tracker uses `~~project tracker` as a tool-agnostic placeholder. See `CONNECTORS.md` for setup details and database schema.
+
+## Commands
+
+| Command | Does |
+|---------|------|
+| `/scan-apartments [city] [max-price]` | Navigate rental portals, extract listings, deduplicate, score, save qualified properties to project tracker |
+| `/analyze-zone [zone-name] [city]` | Pull InsideAirbnb data for a specific neighborhood: occupancy, nightly rates, competitor count, price percentiles |
+| `/business-plan [rent] [zone]` | Full financial projection with scenario analysis at 80/100/120% occupancy, Excel spreadsheet, go/no-go recommendation |
+
+## How it works
+
+Two skills handle different parts of the investment pipeline.
+
+**Property acquisition tracker** automates the grunt work of apartment hunting. It navigates Immobiliare.it and Idealista with configurable filters (price, size, zone, contract type), extracts listing data, checks for subletting restrictions, deduplicates across portals, calculates a quick investment score, and saves qualified listings to your project tracker. Upper floors without elevator get skipped. Transitorio contracts get skipped. Listings that mention "no sublocazione" or "vietato Airbnb" get skipped. What remains is worth evaluating.
+
+**Short-term rental analyzer** takes a zone or a specific apartment and runs the numbers. It downloads real market data from InsideAirbnb (nightly rates, occupancy, competitor density), feeds it into a financial model that accounts for cedolare secca, Airbnb commission structure (3% split-fee or 15.5% host-only), and all operating costs. The output is a monthly projection, an annual ROI calculation, and a recommendation based on three thresholds that all need to pass.
+
+## Decision criteria
+
+A property gets a GO recommendation only when all three metrics clear their minimum:
+
+| Metric | Minimum | Optimal |
+|--------|---------|---------|
+| Break-even | <= 10 days/month | <= 8 days/month |
+| ROI | >= 40% annual | >= 60% annual |
+| Revenue-to-Rent Ratio | >= 2.5x | >= 3x |
+
+The break-even counts how many occupied nights per month cover all fixed costs. ROI measures annual net profit against annual rent paid. Revenue-to-rent ratio is gross monthly revenue (after platform fees) divided by monthly rent. Properties that hit all three optimal thresholds get an "Excellent" confidence rating.
+
+## Tax rules
+
+The calculator uses cedolare secca, Italy's flat tax on short-term rental income. First property: 21%. Second property: 26% on the lower-earning one, 21% on the higher. Operating expenses are not deductible under this regime. Three or more properties require P.IVA registration and a different tax structure entirely.
+
+Airbnb commission defaults to 3% (split-fee model for individual hosts). Hosts using a PMS or host-only pricing pay 15.5% instead. The calculator accepts both via a parameter.
+
+## Market coverage
+
+Milan is pre-configured with zone-level average nightly rates (Centro Storico through Citta Studi) and InsideAirbnb data URLs. To add another Italian city, add its InsideAirbnb URL to the `CITY_DATA_URLS` dictionary in `scripts/market_analyzer.py`. For non-Italian markets, adjust tax rates accordingly.
+
+## Project tracker schema
+
+When setting up the database in Notion, Airtable, or similar:
 
 | Field | Type |
 |-------|------|
@@ -42,20 +131,34 @@ If using Notion or similar, create a database with these fields:
 | Scan Date | Date |
 | Notes | Text |
 
-## Market Coverage
+## Structure
 
-Currently optimized for Italian cities using InsideAirbnb data. Milan zones are pre-configured with average nightly rates. Expandable to other cities by adding InsideAirbnb URLs in the market analyzer script.
+```
+bnb-investment-toolkit/                              the plugin
+├── .claude-plugin/
+│   └── plugin.json                                 plugin manifest
+├── commands/
+│   ├── scan-apartments.md                          portal scouting entry point
+│   ├── analyze-zone.md                             zone market analysis
+│   └── business-plan.md                            full financial projection
+├── skills/
+│   ├── short-term-rental-analyzer/
+│   │   ├── SKILL.md                                zone analysis + business plan workflow
+│   │   └── scripts/
+│   │       ├── market_analyzer.py                  InsideAirbnb data pull + zone stats
+│   │       ├── business_plan_calculator.py         ROI, break-even, scenario analysis
+│   │       └── create_template.py                  Excel business plan generator
+│   └── property-acquisition-tracker/
+│       ├── SKILL.md                                portal scouting workflow
+│       └── references/
+│           ├── portals.md                          URL patterns, filters, extraction rules
+│           └── scoring.md                          thresholds, formulas, zone rates
+├── CONNECTORS.md                                   tool-agnostic connector docs
+└── README.md
+```
 
-## Italian Tax Rules
+3 commands, 2 skills, 3 Python scripts, 2 reference files. No hooks, no agents.
 
-The calculator applies cedolare secca (flat tax on gross rental income): 21% for first property, 26% for second. Operating expenses are not deductible under this regime. For 3+ properties, a P.IVA (business registration) is required with a different tax structure.
+## License
 
-## Decision Criteria
-
-All three thresholds must be met for a GO recommendation:
-
-| Metric | Minimum | Optimal |
-|--------|---------|---------|
-| Break-even | <= 10 days/month | <= 8 days/month |
-| ROI | >= 40% annual | >= 60% annual |
-| Revenue-to-Rent Ratio | >= 2.5x | >= 3x |
+MIT
