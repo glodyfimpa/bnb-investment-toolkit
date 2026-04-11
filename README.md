@@ -17,19 +17,30 @@ Scout apartments from rental portals, evaluate zones with real market data, calc
 
 ## Install
 
+Inside a Claude Code session:
+
 ```
 /plugin marketplace add glodyfimpa/bnb-investment-toolkit
 /plugin install bnb-investment-toolkit@bnb-investment-toolkit
 ```
 
-Or interactively:
+Or from the terminal:
+
+```bash
+claude plugin marketplace add glodyfimpa/bnb-investment-toolkit
+claude plugin install bnb-investment-toolkit@bnb-investment-toolkit
+```
+
+Or interactively inside Claude Code:
 
 ```
 /plugin marketplace add glodyfimpa/bnb-investment-toolkit
 /plugin
 ```
 
-Go to the **Discover** tab, select `bnb-investment-toolkit`, choose a scope (user, project, or local).
+Then go to the **Discover** tab, select `bnb-investment-toolkit`, and choose a scope (user, project, or local).
+
+Verify with `/plugin list` (or `claude plugin list`). You should see `bnb-investment-toolkit@bnb-investment-toolkit — Status: ✔ enabled`. Restart Claude Code after installing so the new slash commands are registered.
 
 ## Update
 
