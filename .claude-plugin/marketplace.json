@@ -1,0 +1,17 @@
+{
+  "name": "bnb-investment-toolkit",
+  "owner": {
+    "name": "Glody Fimpa",
+    "url": "https://github.com/glodyfimpa"
+  },
+  "plugins": [
+    {
+      "name": "bnb-investment-toolkit",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/glodyfimpa/bnb-investment-toolkit.git"
+      },
+      "description": "Analyze short-term rental investments in Italy. Scout apartments from rental portals, evaluate zones with InsideAirbnb data, calculate ROI projections, generate business plans with cedolare secca tax rules."
+    }
+  ]
+}
