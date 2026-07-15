@@ -127,6 +127,27 @@ A common failure is recommending a purchase and leaving the Notion row stale at
 Report to the user: what you found, the verdict, the saving if any, and confirm
 the Notion row is updated.
 
+## Same ASIN, different price per account: count the real total (Buy Box)
+
+Consolidated from memory 2026-07-15. The **same link** (`amazon.it/dp/XXXX`) shows a
+different price/shipping/seller **depending on the logged-in account**. Amazon has no single
+"price": it has N seller offers on the same ASIN and picks which to show (the **Buy Box**) based
+on Prime, business-vs-private, VAT, address, history.
+
+Real case (2026-06-09, vidaXL table B08FMMCTG5): Helen's business account showed 56,99€ VAT-incl
+**+ 7,99€ shipping = 64,98€ total** (and a scorporated 46,71€ taxable base, which is NOT the
+price paid); Glody's private Prime account showed 55,90€ **free shipping = 55,90€ total**. Same
+link, ~9€ apart.
+
+Rules:
+1. The number that counts is the **real total = product + shipping**, never the big headline
+   price alone.
+2. On a **business** account the headline number may be the **VAT-excluded taxable base**
+   (46,71€ = "56,99 VAT incl") — not what is paid.
+3. If you and the user see "the same link" at different prices, it is not a bug, it is the
+   per-account Buy Box. Verify which account is being viewed before concluding.
+4. The only reason to buy from Helen's business account is a **VAT-deductible invoice**.
+
 ## Pattern credits
 
 Step 0 (mandatory requirements gathering) and Step 3 (verify on PDP, never trust
