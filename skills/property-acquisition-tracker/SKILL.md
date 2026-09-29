@@ -109,6 +109,8 @@ For qualified listings, save to ~~project tracker database with structured field
 - Scan Date: Current date
 - Notes: Mini-report with key data summary
 
+If the tracker is the Notion database "(DB) Appartamenti BNB", use its Italian property names (Prezzo, Mq, Zona, Status Investimento…) and set `Aggiunto su BNB` = false: see `references/notion-schema.md`.
+
 ### Step 7: Report Summary
 
 After completing scan, provide summary with total listings scanned per portal, duplicates skipped, listings saved (by status), listings skipped (with reason counts).
