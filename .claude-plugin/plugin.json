@@ -1,6 +1,6 @@
 {
   "name": "bnb-investment-toolkit",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Short-term rental toolkit for Italy, end to end: analyze investment opportunities (market data, ROI, business plans), scout properties from portals, and run a live rental (Amazon supply research with Notion sync, listing copy, guest messages, read-only purchases dashboard)",
   "author": {
     "name": "Glody Fimpa"
