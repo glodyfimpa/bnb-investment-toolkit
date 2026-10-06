@@ -1,0 +1,15 @@
+#!/bin/sh
+# path_refs: vault paths in this repo's instruction prose must resolve from the vault root.
+# Spec: <vault>/docs/superpowers/specs/2026-10-03-vault-path-references-design.md (P5f).
+top="$(pwd -P)"
+vault="$top"
+while [ "$vault" != "/" ] && [ ! -d "$vault/.brain" ]; do vault="$(dirname "$vault")"; done
+if [ ! -d "$vault/.brain" ]; then
+  if [ -n "${BRAIN_ROOT:-}" ] && [ -d "$BRAIN_ROOT/.brain" ]; then vault="$BRAIN_ROOT"; else
+    echo "path_refs: vault root not found, check skipped" >&2; exit 0
+  fi
+fi
+case "$top" in "$vault"/*) rel="${top#"$vault"/}" ;; *) echo "path_refs: repo outside the vault, check skipped" >&2; exit 0 ;; esac
+py="$vault/.brain/system/.venv/bin/python"
+[ -x "$py" ] || { echo "path_refs: vault python missing, check skipped" >&2; exit 0; }
+PYTHONPATH="$vault/.brain/system" exec "$py" -m vault_lint.path_refs_run nested "$vault" "$rel"
