@@ -46,7 +46,7 @@ send a half-filled message. Never put the live lockbox code in anything public
 Warm but concise. A guest reads these on a phone, often mid-travel. Lead with the
 thing they need (the address, the code, the time), then the niceties. Apply the
 user's WRITING STYLE GUIDE: no emoji walls, no exclamation pile-ups, one friendly
-closing line. The existing Via Braida messages are the reference for register —
+closing line. The host's existing guest messages are the reference for register —
 clear, kind, practical.
 
 ## Compliance note

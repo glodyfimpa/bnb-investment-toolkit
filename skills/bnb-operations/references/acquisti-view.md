@@ -33,7 +33,7 @@ python3 scripts/generate_dashboard.py items.json acquisti.html "<House Name>" "<
 
 - `items.json` — the list you just saved
 - `acquisti.html` — output path
-- `<House Name>` (optional) — e.g. "Via Braida"; defaults to "BnB"
+- `<House Name>` (optional) — e.g. "Casa Centro"; defaults to "BnB"
 - `<Notion DB URL>` (optional) — the source-of-truth link shown in the banner
 
 The script recomputes every total from the data — it never trusts a stored total.
@@ -47,8 +47,8 @@ the view is read-only — to change anything, edit the Notion row and regenerate
 
 ## Why this lives here
 
-The script is the generalized version of the one built for Via Braida
-(`projects/via-braida/dashboard-generator/`), parametrized on house name and
+The script is the generalized version of a dashboard first built for one live
+apartment, parametrized on house name and
 source URL so it works for any apartment in the toolkit. It's covered by tests in
 `tests/test_generate_dashboard.py` (totals recomputed, no localStorage, parametric
 title, zero-priced kept in checklist).
